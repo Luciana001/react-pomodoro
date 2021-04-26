@@ -1,0 +1,46 @@
+body {
+    background-color:#008B8B;
+    color: #e5e7ec;
+    font-family: cursive;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+button {
+    background-color: transparent;
+    color:black;
+    cursor:pointer;
+    font-size: 20px;
+    padding: 10px 15px;
+    margin: 10px;
+    border-color: black;
+}
+.flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer-count {
+    margin:20px;
+}
+
+.actions-wrapper span {
+    font-size: 30px;
+    margin: 0 10px;
+}
+.clock-container {
+    border: 2px solid black;
+    border-radius: 15px;
+    display: inline-block;
+    padding: 10px 30px;
+    margin-top: 30px;
+    
+}
+.clock-container h1 {
+    margin: 0;
+}
+.clock-container span {
+    font-size: 60px;
+}
