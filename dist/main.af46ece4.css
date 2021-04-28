@@ -1,7 +1,7 @@
 body {
-    background-color:#008B8B;
-    color: #e5e7ec;
-    font-family: cursive;
+    background-color:#040061;
+    color: white;
+    font-family: Tahoma;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -9,12 +9,12 @@ body {
 }
 button {
     background-color: transparent;
-    color:black;
+    color: white;
     cursor:pointer;
-    font-size: 20px;
+    font-size: 25px;
     padding: 10px 15px;
     margin: 10px;
-    border-color: black;
+    border-color: white;
 }
 .flex {
     display: flex;
@@ -27,15 +27,17 @@ button {
 }
 
 .actions-wrapper span {
-    font-size: 30px;
+    font-size: 50px;
     margin: 0 10px;
+    width: 50px;
 }
 .clock-container {
-    border: 2px solid black;
+    border: 2px solid white;
     border-radius: 15px;
     display: inline-block;
-    padding: 10px 30px;
+    padding: 10px ;
     margin-top: 30px;
+    width: 300px;
     
 }
 .clock-container h1 {

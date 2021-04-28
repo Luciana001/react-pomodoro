@@ -38380,6 +38380,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+var audio = document.getElementById('beep');
+
 var App = /*#__PURE__*/function (_React$Component) {
   _inherits(App, _React$Component);
 
@@ -38395,7 +38397,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     _defineProperty(_assertThisInitialized(_this), "state", {
       breakCount: 5,
       sessionCount: 25,
-      clockCount: 25 * 60,
+      clockCount: 3,
       currentTimer: 'Session',
       isPlaying: false,
       loop: undefined
@@ -38416,13 +38418,40 @@ var App = /*#__PURE__*/function (_React$Component) {
         });
 
         _this.loop = setInterval(function () {
-          var clockCount = _this.state.clockCount;
+          var _this$state = _this.state,
+              clockCount = _this$state.clockCount,
+              currentTimer = _this$state.currentTimer,
+              breakCount = _this$state.breakCount,
+              sessionCount = _this$state.sessionCount;
 
-          _this.setState({
-            clockCount: clockCount - 1
-          });
+          if (clockCount === 0) {
+            _this.setState({
+              currentTimer: currentTimer === 'Session' ? 'break' : 'Session',
+              clockCount: currentTimer === 'Session' ? breakCount * 60 : sessionCount * 60
+            });
+
+            audio.play();
+          } else {
+            _this.setState({
+              clockCount: clockCount - 1
+            });
+          }
         }, 1000);
       }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleReset", function () {
+      _this.setState({
+        breakCount: 5,
+        sessionCount: 25,
+        clockCount: 25 * 60,
+        currentTimer: 'Session',
+        isPlaying: false
+      });
+
+      clearInterval(_this.loop);
+      audio.pause;
+      audio.currentTime = 0;
     });
 
     _defineProperty(_assertThisInitialized(_this), "convertToTime", function (count) {
@@ -38430,6 +38459,31 @@ var App = /*#__PURE__*/function (_React$Component) {
       var seconds = count % 60;
       seconds = seconds < 10 ? '0' + seconds : seconds;
       return "".concat(minutes, ":").concat(seconds);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleLengthChange", function (count, timerType) {
+      var _this$state2 = _this.state,
+          sessionCount = _this$state2.sessionCount,
+          breakCount = _this$state2.breakCount,
+          isPlaying = _this$state2.isPlaying,
+          currentTimer = _this$state2.currentTimer;
+      var newCount;
+
+      if (timerType === 'session') {
+        newCount = sessionCount + count;
+      } else {
+        newCount = breakCount + count;
+      }
+
+      if (newCount > 0 && newCount < 61 & !isPlaying) {
+        _this.setState(_defineProperty({}, "".concat(timerType, "Count"), newCount));
+
+        if (currentTimer.toLowerCase() === timerType) {
+          _this.setState({
+            clockCount: newCount * 60
+          });
+        }
+      }
     });
 
     _this.loop = undefined;
@@ -38440,46 +38494,68 @@ var App = /*#__PURE__*/function (_React$Component) {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       clearInterval(this.loop);
-    } //permet d'afficher le compteur sous le bon format, minutes secondes
+    } //=======================btn Play & Reset=====================================================
+    //permet le décompte du compteur avec btn play
 
   }, {
     key: "render",
-    value: function render() {
-      // fct qu on renvoi au fichier app.js
-      var _this$state = this.state,
-          breakCount = _this$state.breakCount,
-          sessionCount = _this$state.sessionCount,
-          clockCount = _this$state.clockCount,
-          currentTimer = _this$state.currentTimer;
+    value: //--------------------------------------------------------------------------------------------------
+    // fct envoyer au fichier app.js
+    function render() {
+      var _this2 = this;
+
+      var _this$state3 = this.state,
+          breakCount = _this$state3.breakCount,
+          sessionCount = _this$state3.sessionCount,
+          clockCount = _this$state3.clockCount,
+          currentTimer = _this$state3.currentTimer,
+          isPlaying = _this$state3.isPlaying;
       var breakProps = {
-        title: 'Break length',
+        title: 'Break ',
         count: breakCount,
-        handleDecrease: this.handleBreakDecrease,
-        handleIncrease: this.handleBreakIncrease
+        handleDecrease: function handleDecrease() {
+          return _this2.handleLengthChange(-1, 'break');
+        },
+        handleIncrease: function handleIncrease() {
+          return _this2.handleLengthChange(1, 'break');
+        }
       };
       var sessionProps = {
-        title: 'Session length',
+        title: 'Session ',
         count: sessionCount,
-        handleDecrease: this.handleSessionDecrease,
-        handleIncrease: this.handleSessionIncrease
+        handleDecrease: function handleDecrease() {
+          return _this2.handleLengthChange(-1, 'session');
+        },
+        handleIncrease: function handleIncrease() {
+          return _this2.handleLengthChange(1, 'session');
+        }
       };
       return (
         /*#__PURE__*/
         // ce qui sera affiché à l'écran
         _react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
-          class: "flex"
+          className: "flex"
         }, /*#__PURE__*/_react.default.createElement(SetTimer, breakProps), /*#__PURE__*/_react.default.createElement(SetTimer, sessionProps)), /*#__PURE__*/_react.default.createElement("div", {
-          class: "clock-container"
-        }, /*#__PURE__*/_react.default.createElement("h1", null, currentTimer), /*#__PURE__*/_react.default.createElement("span", null, this.convertToTime(clockCount)), /*#__PURE__*/_react.default.createElement("div", {
-          class: "flex"
+          className: "clock-container"
+        }, /*#__PURE__*/_react.default.createElement("h1", {
+          id: "timer-label"
+        }, currentTimer), /*#__PURE__*/_react.default.createElement("span", {
+          id: "time-left"
+        }, this.convertToTime(clockCount)), /*#__PURE__*/_react.default.createElement("div", {
+          className: "flex"
         }, /*#__PURE__*/_react.default.createElement("button", {
+          id: "start_stop",
           onClick: this.handlePlayPause
         }, /*#__PURE__*/_react.default.createElement("i", {
-          class: "fas fa-play"
+          className: "fas fa-play"
+        }), /*#__PURE__*/_react.default.createElement("i", {
+          className: "fa fa-pause",
+          "aria-hidden": "true"
         })), /*#__PURE__*/_react.default.createElement("button", {
+          id: "reset",
           onClick: this.handleReset
         }, /*#__PURE__*/_react.default.createElement("i", {
-          class: "fas fa-sync"
+          className: "fas fa-sync"
         })))))
       );
     }
@@ -38490,18 +38566,25 @@ var App = /*#__PURE__*/function (_React$Component) {
 
 
 var SetTimer = function SetTimer(props) {
+  var id = props.title.tolowerCase;
   return /*#__PURE__*/_react.default.createElement("div", {
-    class: "timer-count"
-  }, /*#__PURE__*/_react.default.createElement("h1", null, props.title), /*#__PURE__*/_react.default.createElement("div", {
-    class: "flex actions-wrapper"
+    className: "timer-count"
+  }, /*#__PURE__*/_react.default.createElement("h2", {
+    id: "".concat(id, "-label")
+  }, props.title, " Length"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "flex actions-wrapper"
   }, /*#__PURE__*/_react.default.createElement("button", {
+    id: "".concat(id, "-decrement"),
     onClick: props.handleDecrease
   }, /*#__PURE__*/_react.default.createElement("i", {
-    class: "fas fa-minus"
-  })), /*#__PURE__*/_react.default.createElement("span", null, props.count), /*#__PURE__*/_react.default.createElement("button", {
+    className: "fas fa-minus"
+  })), /*#__PURE__*/_react.default.createElement("span", {
+    id: "".concat(id, "-length")
+  }, props.count), /*#__PURE__*/_react.default.createElement("button", {
+    id: "".concat(id, "-increment"),
     onClick: props.handleIncrease
   }, /*#__PURE__*/_react.default.createElement("i", {
-    class: "fas fa-plus"
+    className: "fas fa-plus"
   }))));
 };
 
@@ -38547,7 +38630,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52349" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53968" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
