@@ -1,7 +1,7 @@
 import { react } from "babel-types";
 
 import React from "react";
-
+//import modal from "modal";
 const audio = document.getElementById('beep');
 
 class App extends React.Component {
@@ -11,7 +11,8 @@ class App extends React.Component {
       clockCount: 3,
       currentTimer: 'Session',
       isPlaying: false,
-      loop: undefined
+      loop: undefined,
+      //modal: new modal(),
    }
 
    constructor(props) {
@@ -49,6 +50,7 @@ class App extends React.Component {
                   clockCount: (currentTimer === 'Session') ? (breakCount * 60) : (sessionCount * 60)
                });
                audio.play();
+               //modal.handleOpenModal();
             } else {
                this.setState({
                   clockCount: clockCount - 1
@@ -109,6 +111,8 @@ class App extends React.Component {
       }
    }
    //--------------------------------------------------------------------------------------------------
+   
+
    // fct envoyer au fichier app.js
    render() {
       const {
@@ -116,21 +120,20 @@ class App extends React.Component {
          sessionCount,
          clockCount,
          currentTimer,
-         isPlaying
       } = this.state;
 
       const breakProps = {
          title: 'Break ',
          count: breakCount,
          handleDecrease: () => this.handleLengthChange(-1, 'break'),
-         handleIncrease: () => this.handleLengthChange( 1, 'break')
+         handleIncrease: () => this.handleLengthChange(1, 'break')
       }
 
       const sessionProps = {
          title: 'Session ',
          count: sessionCount,
          handleDecrease: () => this.handleLengthChange(-1, 'session'),
-         handleIncrease: () => this.handleLengthChange( 1, 'session')
+         handleIncrease: () => this.handleLengthChange(1, 'session')
       }
 
       return ( // ce qui sera affiché à l'écran

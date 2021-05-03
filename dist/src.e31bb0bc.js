@@ -38380,6 +38380,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//import modal from "modal";
 var audio = document.getElementById('beep');
 
 var App = /*#__PURE__*/function (_React$Component) {
@@ -38400,7 +38401,8 @@ var App = /*#__PURE__*/function (_React$Component) {
       clockCount: 3,
       currentTimer: 'Session',
       isPlaying: false,
-      loop: undefined
+      loop: undefined //modal: new modal(),
+
     });
 
     _defineProperty(_assertThisInitialized(_this), "handlePlayPause", function () {
@@ -38430,7 +38432,7 @@ var App = /*#__PURE__*/function (_React$Component) {
               clockCount: currentTimer === 'Session' ? breakCount * 60 : sessionCount * 60
             });
 
-            audio.play();
+            audio.play(); //modal.handleOpenModal();
           } else {
             _this.setState({
               clockCount: clockCount - 1
@@ -38508,8 +38510,7 @@ var App = /*#__PURE__*/function (_React$Component) {
           breakCount = _this$state3.breakCount,
           sessionCount = _this$state3.sessionCount,
           clockCount = _this$state3.clockCount,
-          currentTimer = _this$state3.currentTimer,
-          isPlaying = _this$state3.isPlaying;
+          currentTimer = _this$state3.currentTimer;
       var breakProps = {
         title: 'Break ',
         count: breakCount,
@@ -38630,7 +38631,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53968" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53442" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
